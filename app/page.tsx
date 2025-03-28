@@ -236,7 +236,7 @@ export default function Home() {
 
           </div>
         </div>
-        <div className='flex space-x-2 mb-4 bg-green-500/50 w-fit p-2 rounded-lg shadow-md font-bold'>
+        <div className='flex space-x-2 mb-4 bg-green-500/50 border border-green-500/50 w-fit p-2 rounded-lg shadow-md font-bold'>
             <label>Budget </label>
             <input
               type="range"
