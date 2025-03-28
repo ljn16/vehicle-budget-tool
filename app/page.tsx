@@ -27,7 +27,7 @@ export default function Home() {
   const accVal = accessories || 0;
   const tradeInVal = tradeIn || 0;
   const svcVal = serviceContract ? 2500 : 0;
-  const gapVal = gap ? 2500 : 0;
+  const gapVal = gap ? 1000 : 0;
   const baseTotal = priceVal + accVal + svcVal + gapVal;
 
   // Calculate monthly payment based on inputs
