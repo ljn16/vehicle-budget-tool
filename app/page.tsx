@@ -58,7 +58,8 @@ export default function Home() {
 
   return (
     <div style={{ padding: '2rem', fontFamily: 'Arial, sans-serif' }}>
-      <h1 className='flex w-full justify-center font-bold text-3xl mb-4'>Payment Calculator</h1>
+      <h1 className='flex w-full justify-center font-bold text-3xl'>Payment Calculator</h1>
+      <p className='text-center text-gray-700 mb-4'>Created by Logan Nelsen</p>
 
  
       <form className=''>
