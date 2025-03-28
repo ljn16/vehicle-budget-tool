@@ -284,6 +284,11 @@ export default function Home() {
                 ))}
               </tbody>
             </table>
+            {!selectedCalc && (
+              <p className='mt-1 italic text-gray-500/50'>
+                * Select cell to see calculation details.
+              </p>
+            )}
             {selectedCalc && (
               <div
                 className="bg-white/15 rounded flex flex-col w-fit"
