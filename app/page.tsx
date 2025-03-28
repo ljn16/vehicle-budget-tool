@@ -9,22 +9,14 @@ export default function Home() {
   const [gap, setGap] = useState(false);
   const [cashDown, setCashDown] = useState(2000);
   const [tradeIn, setTradeIn] = useState(0);
-  // const [paymentType, setPaymentType] = useState('finance');
   const paymentType = 'finance';
 
   const [sliderMax, setSliderMax] = useState(5000);
-  // const [term, setTerm] = useState(60); // Default term for finance
   const term = 60; // Default term for finance
-  // const [result, setResult] = useState(null);
   const [budget, setBudget] = useState(500);
 
   // Default tax rates for finance and lease
   const financeTaxRate = 6.875;
-  // const leaseTaxRate = 8.275;
-
-  // Predefined options for cash down and finance term (months)
-  // const cashDownOptions = [0, 2000, 5000, 10000];
-  // const financeTerms = [24, 36, 48, 60, 72, 80];
 
   // Table options for finance calculations
   const tableCashDownOptions = [Math.max(0, cashDown - 2000), cashDown, cashDown + 2000];
@@ -40,31 +32,8 @@ export default function Home() {
 
   // Calculate monthly payment based on inputs
   const calculateMonthlyPayment = () => {
-    // Parse input values; default to 0 if empty
-    // const price = parseFloat(carPrice) || 0;
-    // const acc = parseFloat(accessories) || 0;
-    // const svc = serviceContract ? 2500 : 0;
-    // const gapCost = gap ? 2500 : 0;
-    // const down = parseFloat(cashDown) || 0;
-    // const trade = parseFloat(tradeIn) || 0;
-    
-    // Total before adjustments
-    // const baseTotal = price + acc + svc + gapCost;
-    
-    // Subtract cash down and trade-in (assuming trade-in provides a tax saving)
-    // const adjustedTotal = baseTotal - down - trade;
-    
-    // Select the tax rate and term depending on payment type
-    // const taxRate = paymentType === 'finance' ? financeTaxRate : leaseTaxRate;
-    // const termMonths = paymentType === 'finance' ? term : 36;
-
-    // Compute monthly payment with the additive tax applied
-    // const monthlyPayment = (adjustedTotal * (1 + taxRate / 100)) / termMonths;
-
-    // setResult(monthlyPayment.toFixed(2));
   };
 
-  // Instead of a standalone function, use the useState hook to manage the showSliderAdjust state
   const [showSliderAdjust, setShowSliderAdjust] = useState(false);
   const [termAPRs, setTermAPRs] = useState<{ [term: number]: number }>({
     36: 3.5,
@@ -73,6 +42,15 @@ export default function Home() {
     72: 5.0,
     84: 5.5,
   });
+  const [selectedCalc, setSelectedCalc] = useState<{
+    cashDownOption: number;
+    termOption: number;
+    apr: number;
+    financeTaxRate: number;
+    baseTotal: number;
+    adjustedTotal: number;
+    monthlyPayment: number;
+  } | null>(null);
 
   useEffect(() => {
     calculateMonthlyPayment();
@@ -125,7 +103,7 @@ export default function Home() {
                     checked={serviceContract}
                     onChange={(e) => setServiceContract(e.target.checked)}
                   />
-                  Service Contract {/* <span className='text-black/50'>(~ $2,500)</span> */}
+                  Service Contract
                 </label>
                 <label>
                   <input
@@ -134,48 +112,13 @@ export default function Home() {
                     checked={gap}
                     onChange={(e) => setGap(e.target.checked)}
                   />
-                  GAP {/* <span className='text-black/50'>(~ $2,500)</span> */}
+                  GAP
                 </label>
               </div>
             </div>
           </div>
 
             <div className='border border-white p-4 rounded-lg shadow-md mb-4 w-fit'>
-            {/* <div className='flex space-x-10'>
-              <label style={{ marginRight: '1rem' }}>
-                <input
-                  type="radio"
-                  name="paymentType"
-                  value="finance"
-                  checked={paymentType === 'finance'}
-                  onChange={() => setPaymentType('finance')}
-                />{' '}
-                Finance
-              </label>
-
-              {paymentType === 'finance' && (
-              <div style={{ marginBottom: '1rem' }}>
-                <select value={term} onChange={(e) => setTerm(Number(e.target.value))}>
-                  {financeTerms.map((t) => (
-                    <option key={t} value={t}>
-                      {t}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            )}
-              <label>
-                <input
-                  type="radio"
-                  name="paymentType"
-                  value="lease"
-                  checked={paymentType === 'lease'}
-                  onChange={() => setPaymentType('lease')}
-                />{' '}
-                Lease (36 months)
-              </label>
-            </div> */}
-            {/* ///////////// */}
             <div className='flex space-x-10'>
               <div className='flex space-x-2'>
                 <div>
@@ -253,52 +196,106 @@ export default function Home() {
       </form>
 
       {paymentType === 'finance' && (
-        <div style={{ marginTop: '2rem' }}>
-          {/* <h2>Payment Table</h2> */}
-          <table style={{ borderCollapse: 'collapse', width: '100%' }}>
-            <thead>
-              <tr>
-                <th style={{ border: '1px solid #ccc', padding: '8px' }}>Cash Down</th>
-                {tableTermOptions.map((termOption) => (
-                    <th key={termOption} style={{ border: '1px solid #ccc',  }}>
-                    {termOption} months<br />
-                    <input
-                      type="number"
-                      step="0.1"
-                      value={termAPRs[termOption]}
-                      onChange={(e) => setTermAPRs({ ...termAPRs, [termOption]: parseFloat(e.target.value) })}
-                      style={{ width: '60px' }}
-                    />%
+        <div style={{ display: 'flex',  minHeight: '100vh' }}>
+          <div style={{ marginTop: '2rem' }}>
+            <table style={{ borderCollapse: 'collapse', width: '100%' }}>
+              <thead>
+                <tr>
+                  <th style={{ border: '1px solid #ccc', padding: '8px' }}>Cash Down</th>
+                  {tableTermOptions.map((termOption) => (
+                    <th key={termOption} style={{ border: '1px solid #ccc' }}>
+                      {termOption} months<br />
+                      <input
+                        type="number"
+                        step="0.1"
+                        value={termAPRs[termOption]}
+                        onChange={(e) => setTermAPRs({ ...termAPRs, [termOption]: parseFloat(e.target.value) })}
+                        style={{ width: '60px' }}
+                      />%
                     </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {tableCashDownOptions.map((cdOption) => (
-                <tr key={cdOption}>
-                  <td style={{ border: '1px solid #ccc', padding: '8px' }}>${cdOption}</td>
-                  {tableTermOptions.map((termOption) => {
-                    const apr = termAPRs[termOption] || 0;
-                    const adjustedTotal = baseTotal - cdOption - tradeInVal;
-                    const monthlyPayment = (adjustedTotal * (1 + (financeTaxRate + apr) / 100)) / termOption;
-                    return (
-                      <td
-                        key={termOption}
-                        style={{
-                          border: '1px solid #ccc',
-                          padding: '8px',
-                          textAlign: 'center',
-                          color: monthlyPayment <= budget ? 'green' : 'inherit'
-                        }}
-                      >
-                        ${monthlyPayment.toFixed(2)}
-                      </td>
-                    );
-                  })}
+                  ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {tableCashDownOptions.map((cdOption) => (
+                  <tr key={cdOption}>
+                    <td style={{ border: '1px solid #ccc', padding: '8px' }}>${cdOption}</td>
+                    {tableTermOptions.map((termOption) => {
+                      const apr = termAPRs[termOption] || 0;
+                      const adjustedTotal = baseTotal - cdOption - tradeInVal;
+                      const monthlyPayment = (adjustedTotal * (1 + (financeTaxRate + apr) / 100)) / termOption;
+                      return (
+                        <td
+                          key={termOption}
+                          style={{
+                            border: '1px solid #ccc',
+                            padding: '8px',
+                            textAlign: 'center',
+                            color: monthlyPayment <= budget ? 'green' : 'inherit',
+                            backgroundColor:
+                              selectedCalc && selectedCalc.cashDownOption === cdOption && selectedCalc.termOption === termOption
+                                ? '#ffeb3b'
+                                : 'inherit'
+                          }}
+                          onClick={() => {
+                            setSelectedCalc({
+                              cashDownOption: cdOption,
+                              termOption: termOption,
+                              apr: apr,
+                              financeTaxRate: financeTaxRate,
+                              baseTotal: baseTotal,
+                              adjustedTotal: adjustedTotal,
+                              monthlyPayment: monthlyPayment
+                            });
+                          }}
+                        >
+                          ${monthlyPayment.toFixed(2)}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {selectedCalc && (
+              <div
+                className="bg-white/15 rounded flex flex-col w-fit"
+                style={{ marginTop: '1rem', padding: '1rem', border: '1px solid #ccc' }}
+              >
+                <h3>Calculation Details:</h3>
+                <p>
+                  <strong>Base Total:</strong> ${selectedCalc.baseTotal.toFixed(2)}
+                </p>
+                <p>
+                  <strong>Cash Down Option:</strong> ${selectedCalc.cashDownOption.toFixed(2)}
+                </p>
+                <p>
+                  <strong>Trade-In Value:</strong> ${tradeInVal.toFixed(2)}
+                </p>
+                <p>
+                  <strong>Adjusted Total:</strong> ${selectedCalc.adjustedTotal.toFixed(2)}
+                </p>
+                <p>
+                  <strong>Finance Tax Rate:</strong> {selectedCalc.financeTaxRate}%
+                </p>
+                <p>
+                  <strong>APR:</strong> {selectedCalc.apr}%
+                </p>
+                <p>
+                  <strong>Term:</strong> {selectedCalc.termOption} months
+                </p>
+                <hr />
+                <p>
+                  <strong>Calculation:</strong> (({selectedCalc.baseTotal.toFixed(2)} -{' '}
+                  {selectedCalc.cashDownOption.toFixed(2)} - {tradeInVal.toFixed(2)}) * (1 + (({selectedCalc.financeTaxRate} + {selectedCalc.apr}) / 100))) /{' '}
+                  {selectedCalc.termOption} = ${selectedCalc.monthlyPayment.toFixed(2)}
+                </p>
+                <p className="border border-white flex justify-center m-4 p-2 rounded">
+                  <strong>Monthly Payment:</strong> ${selectedCalc.monthlyPayment.toFixed(2)}
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>
