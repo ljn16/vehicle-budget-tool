@@ -232,6 +232,7 @@ export default function Home() {
                             border: '1px solid #ccc',
                             padding: '8px',
                             textAlign: 'center',
+                            cursor: 'pointer',
                             color: monthlyPayment <= budget ? 'green' : 'inherit',
                             backgroundColor:
                               selectedCalc && selectedCalc.cashDownOption === cdOption && selectedCalc.termOption === termOption
