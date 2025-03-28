@@ -12,6 +12,8 @@ export default function Home() {
   const paymentType = 'finance';
 
   const [sliderMax, setSliderMax] = useState(5000);
+  const [tradeSliderMax, setTradeSliderMax] = useState(20000);
+  const [showTradeSliderAdjust, setShowTradeSliderAdjust] = useState(false);
   const term = 60; // Default term for finance
   const [budget, setBudget] = useState(500);
 
@@ -121,7 +123,7 @@ export default function Home() {
 
             <div className='border border-white p-4 rounded-lg shadow-md mb-4 w-fit'>
             <div className='flex space-x-10'>
-              <div className='flex space-x-2'>
+              <div className='flex space-x-2 flex-col'>
                 <div>
                   <button
                     type="button"
@@ -144,9 +146,10 @@ export default function Home() {
                       </label>
                     </div>
                   )}
+                  <label className='ml-2'>Cash Down </label>
+
                 </div>
                 <div>
-                  <label>Cash Down </label>
                   <input
                     type="range"
                     style={{ cursor: 'pointer' }}
@@ -162,12 +165,34 @@ export default function Home() {
               </div>
 
               <div style={{ marginBottom: '1rem' }}>
-                <label>Trade Value </label>
+                <div className='flex space-x-2 items-center'>
+                  <button
+                    type="button"
+                    onClick={() => setShowTradeSliderAdjust(!showTradeSliderAdjust)}
+                    className='bg-none border-none text-blue-500/50 cursor-pointer p-0'
+                  >
+                    {showTradeSliderAdjust ? '▼' : '▶'}
+                  </button>
+                  <label>Trade Value </label>
+                </div>
+                {showTradeSliderAdjust && (
+                  <div style={{ marginTop: '0.5rem' }}>
+                    <label className='text-red-500'>
+                      Adjust Trade Max Range:&nbsp;
+                      <input
+                        type="number"
+                        value={tradeSliderMax}
+                        onChange={(e) => setTradeSliderMax(Number(e.target.value))}
+                        style={{ width: '80px' }}
+                      />
+                    </label>
+                  </div>
+                )}
                 <input
                   type="range"
                   style={{ cursor: 'pointer' }}
                   min={0}
-                  max={20000}
+                  max={tradeSliderMax}
                   step={100}
                   value={tradeIn ? Number(tradeIn) : 0}
                   onChange={(e) => setTradeIn(Number(e.target.value))}
