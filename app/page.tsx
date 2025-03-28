@@ -28,7 +28,7 @@ export default function Home() {
   const priceVal = carPrice || 0;
   const accVal = accessories || 0;
   const tradeInVal = tradeIn || 0;
-  const svcVal = serviceContract ? 2500 : 0;
+  const svcVal = serviceContract ? 3000 : 0;
   const gapVal = gap ? 1000 : 0;
   const baseTotal = priceVal + accVal + svcVal + gapVal;
 
@@ -58,6 +58,11 @@ export default function Home() {
     calculateMonthlyPayment();
   }, [carPrice, accessories, serviceContract, gap, cashDown, tradeIn, paymentType, term]);
 
+  const [showBaseBreakdown, setShowBaseBreakdownState] = useState(false);
+
+  function setShowBaseBreakdown(updateFn: (prev: boolean) => boolean): void {
+    setShowBaseBreakdownState(prev => updateFn(prev));
+  }
   return (
     <div style={{ padding: '2rem', fontFamily: 'Arial, sans-serif' }}>
       <h1 className='flex w-full justify-center font-bold text-3xl'>Vehicle Payment Calculator</h1>
@@ -294,36 +299,62 @@ export default function Home() {
                 className="bg-white/15 rounded flex flex-col w-fit"
                 style={{ marginTop: '1rem', padding: '1rem', border: '1px solid #ccc' }}
               >
-                <h3>Calculation Details:</h3>
+                <h3 className=''>Calculation Details:</h3>
                 <p>
-                  <strong>Base Total:</strong> ${selectedCalc.baseTotal.toFixed(2)}
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <button
+                        onClick={() => setShowBaseBreakdown(prev => !prev)}
+                        className='mr-2 opacity-25'
+                        style={{ cursor: 'pointer' }}
+                      >
+                        {showBaseBreakdown ? '▼' : '▶'}
+                      </button>
+                      <strong className='mr-1'>Base Total:</strong> ${selectedCalc.baseTotal.toFixed(2)}
+
+                    </div>
+                    {showBaseBreakdown && (
+                      <div className='font-extralight text-gray-500/80 ml-10 mt-0'>
+                        <div>Car Price: ${priceVal.toFixed(2)}</div>
+                        <div>Accessories: ${accVal.toFixed(2)}</div>
+                        <div>Service Contract: ${svcVal.toFixed(2)}</div>
+                        <div>GAP: ${gapVal.toFixed(2)}</div>
+                      </div>
+                    )}
+                  </div>
                 </p>
-                <p>
-                  <strong>Cash Down Option:</strong> ${selectedCalc.cashDownOption.toFixed(2)}
-                </p>
-                <p>
-                  <strong>Trade-In Value:</strong> ${tradeInVal.toFixed(2)}
-                </p>
-                <p>
-                  <strong>Adjusted Total:</strong> ${selectedCalc.adjustedTotal.toFixed(2)}
-                </p>
-                <p>
-                  <strong>Finance Tax Rate:</strong> {selectedCalc.financeTaxRate}%
-                </p>
-                <p>
-                  <strong>APR:</strong> {selectedCalc.apr}%
-                </p>
-                <p>
-                  <strong>Term:</strong> {selectedCalc.termOption} months
-                </p>
-                <hr />
+                <div className='ml-6'>
+                  <p>
+                    <strong>Cash Down Option:</strong> ${selectedCalc.cashDownOption.toFixed(2)}
+                  </p>
+                  <p>
+                    <strong>Trade-In Value:</strong> ${tradeInVal.toFixed(2)}
+                  </p>
+                  <p>
+                    <strong>Adjusted Total:</strong> ${selectedCalc.adjustedTotal.toFixed(2)}
+                  </p>
+                  <p>
+                    <strong>Finance Tax Rate:</strong> {selectedCalc.financeTaxRate}%
+                  </p>
+                  <p>
+                    <strong>APR:</strong> {selectedCalc.apr}%
+                  </p>
+                  <p>
+                    <strong>Term:</strong> {selectedCalc.termOption} months
+                  </p>
+                </div>
+
+                <div className='my-2 opacity-30'>
+                  <hr />
+                </div>
+
                 <p>
                   <strong>Calculation:</strong> (({selectedCalc.baseTotal.toFixed(2)} -{' '}
                   {selectedCalc.cashDownOption.toFixed(2)} - {tradeInVal.toFixed(2)}) * (1 + (({selectedCalc.financeTaxRate} + {selectedCalc.apr}) / 100))) /{' '}
                   {selectedCalc.termOption} = ${selectedCalc.monthlyPayment.toFixed(2)}
                 </p>
                 <p className="border border-white flex justify-center m-4 p-2 rounded">
-                  <strong>Monthly Payment:</strong> ${selectedCalc.monthlyPayment.toFixed(2)}
+                  <strong className='mr-1'>Monthly Payment:</strong> ${selectedCalc.monthlyPayment.toFixed(2)}
                 </p>
               </div>
             )}
