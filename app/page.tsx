@@ -30,7 +30,8 @@ export default function Home() {
   const tradeInVal = tradeIn || 0;
   const svcVal = serviceContract ? 3000 : 0;
   const gapVal = gap ? 1000 : 0;
-  const baseTotal = priceVal + accVal + svcVal + gapVal;
+  const titleLicenseFee = 500;
+  const baseTotal = priceVal + accVal + svcVal + gapVal + titleLicenseFee;
 
   // Calculate monthly payment based on inputs
   const calculateMonthlyPayment = () => {
@@ -64,302 +65,304 @@ export default function Home() {
     setShowBaseBreakdownState(prev => updateFn(prev));
   }
   return (
-    <div style={{ padding: '2rem', fontFamily: 'Arial, sans-serif' }}>
-      <h1 className='flex w-full justify-center font-bold text-3xl'>Vehicle Payment Calculator</h1>
-      <p className='text-center text-gray-700 mb-4'>Created by Logan Nelsen</p>
+    <div className="p-8 font-sans">
+      <h1 className="flex w-full justify-center font-bold text-3xl">
+      Vehicle Payment Calculator
+      </h1>
+      <p className="text-center text-gray-700 mb-4">Created by Logan Nelsen</p>
 
- 
-      <form className=''>
-        <div className='bg-gray-200 p-4 rounded-lg shadow-md mb-4 text-black'>
-
-          
-          <div className='border border-white p-4 rounded-lg shadow-md mb-4 w-fit'>
-            <div className='flex space-x-10'>
-              <div style={{ marginBottom: '1rem' }}>
-                <label>Car Price: </label>
-                <input
-                  type="range"
-                  style={{ cursor: 'pointer' }}
-                  min={0}
-                  max={60000}
-                  step={200}
-                  value={carPrice ? Number(carPrice) : 30000}
-                  onChange={(e) => setCarPrice(Number(e.target.value))}
-                  required
-                />
-                <span> ${carPrice ? Number(carPrice).toLocaleString() : (30000).toLocaleString()}</span>
-              </div>
-
-              <div style={{ marginBottom: '1rem' }}>
-                <label>Accessories: </label>
-                <input
-                  type="range"
-                  style={{ cursor: 'pointer' }}
-                  min="0"
-                  max="5000"
-                  step="100"
-                  value={accessories ? Number(accessories) : 0}
-                  onChange={(e) => setAccessories(Number(e.target.value))}
-                />
-                <span> ${accessories ? Number(accessories).toLocaleString() : 0}</span>
-              </div>
-              <div className='space-x-2'>
-                <label>
-                  <input
-                    className='m-2'
-                    type="checkbox"
-                    checked={serviceContract}
-                    onChange={(e) => setServiceContract(e.target.checked)}
-                  />
-                  Service Contract
-                </label>
-                <label>
-                  <input
-                    className='mr-2'
-                    type="checkbox"
-                    checked={gap}
-                    onChange={(e) => setGap(e.target.checked)}
-                  />
-                  GAP
-                </label>
-              </div>
-            </div>
+      <form className="flex flex-col w-full items-center">
+      <div className="flex flex-col items-center bg-gray-200 p-4 rounded-lg shadow-md mb-4 text-black w-fit">
+        <div className="border border-white p-4 rounded-lg shadow-md mb-4 w-fit">
+        <div className="flex space-x-10">
+          <div className="mb-4">
+          <label>Car Price: </label>
+          <input
+            type="range"
+            className="cursor-pointer"
+            min={0}
+            max={60000}
+            step={200}
+            value={carPrice ? Number(carPrice) : 30000}
+            onChange={(e) => setCarPrice(Number(e.target.value))}
+            required
+          />
+          <span> ${carPrice ? Number(carPrice).toLocaleString() : (30000).toLocaleString()}</span>
           </div>
 
-            <div className='border border-white p-4 rounded-lg shadow-md mb-4 w-fit'>
-            <div className='flex space-x-10'>
-              <div className='flex space-x-2 flex-col'>
-                <div>
-                  <button
-                    type="button"
-                    onClick={() => setShowSliderAdjust(!showSliderAdjust)}
-                    className='bg-none border-none text-blue-500/50 cursor-pointer p-0'
-                  >
-                    {showSliderAdjust ? '▼' : '▶'}
-                  </button>
-
-                  {showSliderAdjust && (
-                    <div style={{ marginTop: '0.5rem' }}>
-                      <label className='text-red-500'>
-                        Adjust Max Range:&nbsp;
-                        <input
-                          type="number"
-                          value={sliderMax}
-                          onChange={(e) => setSliderMax(Number(e.target.value))}
-                          style={{ width: '80px' }}
-                        />
-                      </label>
-                    </div>
-                  )}
-                  <label className='ml-2'>Cash Down </label>
-
-                </div>
-                <div>
-                  <input
-                    type="range"
-                    style={{ cursor: 'pointer' }}
-                    min={0}
-                    max={sliderMax}
-                    value={cashDown}
-                    step={100}
-                    onChange={(e) => setCashDown(Number(e.target.value))}
-                  />
-                  <span> ${Number(cashDown).toLocaleString()}</span>
-                </div>
-
-              </div>
-
-              <div style={{ marginBottom: '1rem' }}>
-                <div className='flex space-x-2 items-center'>
-                  <button
-                    type="button"
-                    onClick={() => setShowTradeSliderAdjust(!showTradeSliderAdjust)}
-                    className='bg-none border-none text-blue-500/50 cursor-pointer p-0'
-                  >
-                    {showTradeSliderAdjust ? '▼' : '▶'}
-                  </button>
-                  <label>Trade Value </label>
-                </div>
-                {showTradeSliderAdjust && (
-                  <div style={{ marginTop: '0.5rem' }}>
-                    <label className='text-red-500'>
-                      Adjust Trade Max Range:&nbsp;
-                      <input
-                        type="number"
-                        value={tradeSliderMax}
-                        onChange={(e) => setTradeSliderMax(Number(e.target.value))}
-                        style={{ width: '80px' }}
-                      />
-                    </label>
-                  </div>
-                )}
-                <input
-                  type="range"
-                  style={{ cursor: 'pointer' }}
-                  min={0}
-                  max={tradeSliderMax}
-                  step={100}
-                  value={tradeIn ? Number(tradeIn) : 0}
-                  onChange={(e) => setTradeIn(Number(e.target.value))}
-                />
-                <span> ${tradeIn ? Number(tradeIn).toLocaleString() : 0}</span>
-              </div>
-            </div>
-
-
-
+          <div className="mb-4">
+          <label>Accessories: </label>
+          <input
+            type="range"
+            className="cursor-pointer"
+            min="0"
+            max="5000"
+            step="100"
+            value={accessories ? Number(accessories) : 0}
+            onChange={(e) => setAccessories(Number(e.target.value))}
+          />
+          <span> ${accessories ? Number(accessories).toLocaleString() : 0}</span>
           </div>
-        </div>
-        <div className='flex space-x-2 mb-4 bg-green-500/50 border border-green-500/50 w-fit p-2 rounded-lg shadow-md font-bold'>
-            <label>Budget </label>
+          <div className="space-x-2">
+          <label>
             <input
-              type="range"
-              style={{ cursor: 'pointer' }}
-              min={0}
-              max={1000}
-              step={10}
-              value={budget}
-              onChange={(e) => setBudget(Number(e.target.value))}
+            className="m-2"
+            type="checkbox"
+            checked={serviceContract}
+            onChange={(e) => setServiceContract(e.target.checked)}
             />
-            <span> ${Number(budget).toLocaleString()} {'/m'}</span>
+            Service Contract
+          </label>
+          <label>
+            <input
+            className="mr-2"
+            type="checkbox"
+            checked={gap}
+            onChange={(e) => setGap(e.target.checked)}
+            />
+            GAP
+          </label>
+          </div>
+        </div>
         </div>
 
+        <div className="border border-white p-4 rounded-lg shadow-md mb-4 w-fit">
+        <div className="flex space-x-10">
+          <div className="flex flex-col space-y-2">
+          <div className="flex items-center">
+            <button
+            type="button"
+            onClick={() => setShowSliderAdjust(!showSliderAdjust)}
+            className="bg-none border-none text-blue-500/50 cursor-pointer p-0 mr-2"
+            >
+            {showSliderAdjust ? '▼' : '▶'}
+            </button>
+            <label>Cash Down</label>
+          </div>
+          {showSliderAdjust && (
+            <div className="mt-2">
+            <label className="text-red-500">
+              Adjust Max Range:&nbsp;
+              <input
+              type="number"
+              className="w-20"
+              value={sliderMax}
+              onChange={(e) => setSliderMax(Number(e.target.value))}
+              />
+            </label>
+            </div>
+          )}
+          <div>
+            <input
+            type="range"
+            className="cursor-pointer"
+            min={0}
+            max={sliderMax}
+            value={cashDown}
+            step={100}
+            onChange={(e) => setCashDown(Number(e.target.value))}
+            />
+            <span> ${Number(cashDown).toLocaleString()}</span>
+          </div>
+          </div>
+
+          <div className="mb-4">
+          <div className="flex items-center space-x-2">
+            <button
+            type="button"
+            onClick={() => setShowTradeSliderAdjust(!showTradeSliderAdjust)}
+            className="bg-none border-none text-blue-500/50 cursor-pointer p-0"
+            >
+            {showTradeSliderAdjust ? '▼' : '▶'}
+            </button>
+            <label>Trade Value</label>
+          </div>
+          {showTradeSliderAdjust && (
+            <div className="mt-2">
+            <label className="text-red-500">
+              Adjust Trade Max Range:&nbsp;
+              <input
+              type="number"
+              className="w-20"
+              value={tradeSliderMax}
+              onChange={(e) => setTradeSliderMax(Number(e.target.value))}
+              />
+            </label>
+            </div>
+          )}
+          <div>
+            <input
+            type="range"
+            className="cursor-pointer"
+            min={0}
+            max={tradeSliderMax}
+            step={100}
+            value={tradeIn ? Number(tradeIn) : 0}
+            onChange={(e) => setTradeIn(Number(e.target.value))}
+            />
+            <span> ${tradeIn ? Number(tradeIn).toLocaleString() : 0}</span>
+          </div>
+          </div>
+        </div>
+        </div>
+      </div>
+      <div className="flex items-center space-x-2 mb-4 bg-green-500/50 border border-green-500/50 w-fit p-2 rounded-lg shadow-md font-bold">
+        <label>Budget </label>
+        <input
+        type="range"
+        className="cursor-pointer"
+        min={0}
+        max={1000}
+        step={10}
+        value={budget}
+        onChange={(e) => setBudget(Number(e.target.value))}
+        />
+        <span> ${Number(budget).toLocaleString()} /m</span>
+      </div>
       </form>
 
       {paymentType === 'finance' && (
-        <div style={{ display: 'flex',  minHeight: '100vh' }}>
-          <div style={{ marginTop: '2rem' }}>
-            <table style={{ borderCollapse: 'collapse', width: '100%' }}>
-              <thead>
-                <tr>
-                  <th style={{ border: '1px solid #ccc', padding: '8px' }}>Cash Down</th>
-                  {tableTermOptions.map((termOption) => (
-                    <th key={termOption} style={{ border: '1px solid #ccc' }}>
-                      {termOption} months<br />
-                      <input
-                        type="number"
-                        step="0.1"
-                        value={termAPRs[termOption]}
-                        onChange={(e) => setTermAPRs({ ...termAPRs, [termOption]: parseFloat(e.target.value) })}
-                        style={{ width: '60px' }}
-                      />%
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {tableCashDownOptions.map((cdOption) => (
-                  <tr key={cdOption}>
-                    <td style={{ border: '1px solid #ccc', padding: '8px' }}>${cdOption}</td>
-                    {tableTermOptions.map((termOption) => {
-                      const apr = termAPRs[termOption] || 0;
-                      const adjustedTotal = baseTotal - cdOption - tradeInVal;
-                      const monthlyPayment = (adjustedTotal * (1 + (financeTaxRate + apr) / 100)) / termOption;
-                      return (
-                        <td
-                          key={termOption}
-                          style={{
-                            border: '1px solid #ccc',
-                            padding: '8px',
-                            textAlign: 'center',
-                            cursor: 'pointer',
-                            color: monthlyPayment <= budget ? 'green' : 'inherit',
-                            backgroundColor:
-                              selectedCalc && selectedCalc.cashDownOption === cdOption && selectedCalc.termOption === termOption
-                                ? '#ffeb3b'
-                                : 'inherit'
-                          }}
-                          onClick={() => {
-                            setSelectedCalc({
-                              cashDownOption: cdOption,
-                              termOption: termOption,
-                              apr: apr,
-                              financeTaxRate: financeTaxRate,
-                              baseTotal: baseTotal,
-                              adjustedTotal: adjustedTotal,
-                              monthlyPayment: monthlyPayment
-                            });
-                          }}
-                        >
-                          ${monthlyPayment.toFixed(2)}
-                        </td>
-                      );
-                    })}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            {!selectedCalc && (
-              <p className='mt-1 italic text-gray-500/50'>
-                * Select cell to see calculation details.
-              </p>
-            )}
-            {selectedCalc && (
-              <div
-                className="bg-white/15 rounded flex flex-col w-fit"
-                style={{ marginTop: '1rem', padding: '1rem', border: '1px solid #ccc' }}
+      <div className="flex flex-col items-center">
+        <div className="mt-2">
+        <table className="w-full border-collapse">
+          <thead>
+          <tr>
+            <th className="border border-gray-300 p-2">Cash Down</th>
+            {tableTermOptions.map((termOption) => (
+            <th key={termOption} className="border border-gray-300 p-2">
+              {termOption} months
+              <br />
+              <input
+              type="number"
+              step="0.1"
+              value={termAPRs[termOption]}
+              onChange={(e) =>
+                setTermAPRs({
+                ...termAPRs,
+                [termOption]: parseFloat(e.target.value),
+                })
+              }
+              className="w-16"
+              />
+              %
+            </th>
+            ))}
+          </tr>
+          </thead>
+          <tbody>
+          {tableCashDownOptions.map((cdOption) => (
+            <tr key={cdOption}>
+            <td className="border border-gray-300 p-2">
+              ${cdOption}
+            </td>
+            {tableTermOptions.map((termOption) => {
+              const apr = termAPRs[termOption] || 0;
+              const adjustedTotal = baseTotal - cdOption - tradeInVal;
+              const monthlyPayment =
+              (adjustedTotal * (1 + (financeTaxRate + apr) / 100)) / termOption;
+              return (
+              <td
+                key={termOption}
+                className={`border border-gray-300 p-2 text-center cursor-pointer ${
+                monthlyPayment <= budget ? 'text-green-500' : ''
+                } ${
+                selectedCalc &&
+                selectedCalc.cashDownOption === cdOption &&
+                selectedCalc.termOption === termOption
+                  ? 'bg-yellow-300'
+                  : ''
+                }`}
+                onClick={() => {
+                setSelectedCalc({
+                  cashDownOption: cdOption,
+                  termOption: termOption,
+                  apr: apr,
+                  financeTaxRate: financeTaxRate,
+                  baseTotal: baseTotal,
+                  adjustedTotal: adjustedTotal,
+                  monthlyPayment: monthlyPayment,
+                });
+                }}
               >
-                <h3 className=''>Calculation Details:</h3>
-                <p>
-                  <div>
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                      <button
-                        onClick={() => setShowBaseBreakdown(prev => !prev)}
-                        className='mr-2 opacity-25'
-                        style={{ cursor: 'pointer' }}
-                      >
-                        {showBaseBreakdown ? '▼' : '▶'}
-                      </button>
-                      <strong className='mr-1'>Base Total:</strong> ${selectedCalc.baseTotal.toFixed(2)}
-
-                    </div>
-                    {showBaseBreakdown && (
-                      <div className='font-extralight text-gray-500/80 ml-10 mt-0'>
-                        <div>Car Price: ${priceVal.toFixed(2)}</div>
-                        <div>Accessories: ${accVal.toFixed(2)}</div>
-                        <div>Service Contract: ${svcVal.toFixed(2)}</div>
-                        <div>GAP: ${gapVal.toFixed(2)}</div>
-                      </div>
-                    )}
-                  </div>
-                </p>
-                <div className='ml-6'>
-                  <p>
-                    <strong>Cash Down Option:</strong> ${selectedCalc.cashDownOption.toFixed(2)}
-                  </p>
-                  <p>
-                    <strong>Trade-In Value:</strong> ${tradeInVal.toFixed(2)}
-                  </p>
-                  <p>
-                    <strong>Adjusted Total:</strong> ${selectedCalc.adjustedTotal.toFixed(2)}
-                  </p>
-                  <p>
-                    <strong>Finance Tax Rate:</strong> {selectedCalc.financeTaxRate}%
-                  </p>
-                  <p>
-                    <strong>APR:</strong> {selectedCalc.apr}%
-                  </p>
-                  <p>
-                    <strong>Term:</strong> {selectedCalc.termOption} months
-                  </p>
-                </div>
-
-                <div className='my-2 opacity-30'>
-                  <hr />
-                </div>
-
-                <p>
-                  <strong>Calculation:</strong> (({selectedCalc.baseTotal.toFixed(2)} -{' '}
-                  {selectedCalc.cashDownOption.toFixed(2)} - {tradeInVal.toFixed(2)}) * (1 + (({selectedCalc.financeTaxRate} + {selectedCalc.apr}) / 100))) /{' '}
-                  {selectedCalc.termOption} = ${selectedCalc.monthlyPayment.toFixed(2)}
-                </p>
-                <p className="border border-white flex justify-center m-4 p-2 rounded">
-                  <strong className='mr-1'>Monthly Payment:</strong> ${selectedCalc.monthlyPayment.toFixed(2)}
-                </p>
-              </div>
+                ${monthlyPayment.toFixed(2)}
+              </td>
+              );
+            })}
+            </tr>
+          ))}
+          </tbody>
+        </table>
+        {!selectedCalc && (
+          <p className="mt-1 italic text-gray-500/50">
+          * Select cell to see calculation details.
+          </p>
+        )}
+        {selectedCalc && (
+          <div className="rounded flex flex-col w-fit mt-4 p-4 border border-gray-300">
+          <h3>Calculation Details:</h3>
+          <div>
+            <div className="flex items-center">
+            <button
+              onClick={() => setShowBaseBreakdown((prev) => !prev)}
+              className="mr-2 opacity-25 cursor-pointer"
+            >
+              {showBaseBreakdown ? '▼' : '▶'}
+            </button>
+            <strong className="mr-1">Base Total:</strong>{' '}
+            ${selectedCalc.baseTotal.toFixed(2)}
+            </div>
+            {showBaseBreakdown && (
+            <div className="font-extralight text-gray-500 ml-10">
+              <div>Car Price: ${priceVal.toFixed(2)}</div>
+              <div>Accessories: ${accVal.toFixed(2)}</div>
+              <div>Service Contract: ${svcVal.toFixed(2)}</div>
+              <div>GAP: ${gapVal.toFixed(2)}</div>
+              <div>Title/License: $500.00</div>
+            </div>
             )}
           </div>
+          <div className="ml-6">
+            <p>
+            <strong>Cash Down Option:</strong>{' '}
+            ${selectedCalc.cashDownOption.toFixed(2)}
+            </p>
+            <p>
+            <strong>Trade-In Value:</strong> ${tradeInVal.toFixed(2)}
+            </p>
+            <p>
+            <strong>Adjusted Total:</strong>{' '}
+            ${selectedCalc.adjustedTotal.toFixed(2)}
+            </p>
+            <p>
+            <strong>Finance Tax Rate:</strong>{' '}
+            {selectedCalc.financeTaxRate}%
+            </p>
+            <p>
+            <strong>APR:</strong> {selectedCalc.apr}%
+            </p>
+            <p>
+            <strong>Term:</strong> {selectedCalc.termOption} months
+            </p>
+          </div>
+
+          <div className="my-2 opacity-30">
+            <hr />
+          </div>
+
+          <p>
+            <strong>Calculation:</strong> (({selectedCalc.baseTotal.toFixed(2)} -
+            {selectedCalc.cashDownOption.toFixed(2)} - {tradeInVal.toFixed(2)}) * (1 +
+            (({selectedCalc.financeTaxRate} + {selectedCalc.apr}) / 100))) /{' '}
+            {selectedCalc.termOption} = ${selectedCalc.monthlyPayment.toFixed(2)}
+          </p>
+          <p className="border border-white flex justify-center m-4 p-2 rounded">
+            <strong className="mr-1">Monthly Payment:</strong>{' '}
+            ${selectedCalc.monthlyPayment.toFixed(2)}
+          </p>
+          </div>
+        )}
         </div>
+      </div>
       )}
     </div>
   );
