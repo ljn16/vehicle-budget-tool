@@ -16,9 +16,10 @@ export default function Home() {
   const [showTradeSliderAdjust, setShowTradeSliderAdjust] = useState(false);
   const term = 60; // Default term for finance
   const [budget, setBudget] = useState(500);
+  const [showAdditionalSettings, setShowAdditionalSettings] = useState(false);
 
   // Default tax rates for finance and lease
-  const financeTaxRate = 6.875;
+  const [financeTaxRate, setFinanceTaxRate] = useState(6.875);
 
   // Table options for finance calculations
   // const tableCashDownOptions = [Math.max(0, cashDown - 2000), cashDown, cashDown + 2000];
@@ -90,6 +91,41 @@ export default function Home() {
   }
   return (
     <div className="p-4 md:p-8 font-sans">
+      <div className="absolute top-0 right-0 m-4 z-10">
+        <button
+          type="button"
+          onClick={() => setShowAdditionalSettings(!showAdditionalSettings)}
+          className="bg-blue-500 text-white px-2 py-1 rounded hover:cursor-pointer"
+        >
+          {showAdditionalSettings ? 'Advanced' : 'Advanced'}
+        </button>
+        {showAdditionalSettings && (
+          <div className="mt-2 p-4 bg-gray-100 border rounded shadow text-black">
+            <h3 className="text-lg font-bold mb-2">Additional Settings</h3>
+            <div className="mb-2">
+              <label className="mr-2">Tax Rate:</label>
+              <input
+                type="number"
+                value={financeTaxRate}
+                onChange={(e) => setFinanceTaxRate(Number(e.target.value))}
+                className="border rounded px-1 w-20"
+              />
+            </div>
+            <div>
+              <p className='opacity-35'>Additional settings comming soon</p>
+            </div>
+            {/* <div>
+              <label className="mr-2">GAP:</label>
+              <input
+                type="checkbox"
+                checked={gap}
+                onChange={(e) => setGap(e.target.checked)}
+                className="cursor-pointer"
+              />
+            </div> */}
+          </div>
+        )}
+      </div>
       <h1 className="flex w-full justify-center font-bold text-3xl">
       Vehicle Payment Calculator
       </h1>
