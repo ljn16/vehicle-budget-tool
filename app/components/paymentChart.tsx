@@ -46,7 +46,7 @@ export default function PaymentChart({ /* paymentType, */ tableTermOptions, tabl
   }, []);
 
   return (
-        <div className="flex flex-col items-center mt-2 bg-blue-100/10 justify-center">
+        <div className="flex flex-col items-center mt-2 justify-center">
           {/*//?  *  */}
 
           <div className="relative group">
