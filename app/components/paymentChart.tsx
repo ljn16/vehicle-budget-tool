@@ -52,7 +52,7 @@ export default function PaymentChart({ /* paymentType, */ tableTermOptions, tabl
           <div className="relative group">
             <button
               type="button"
-              className="cursor-help absolute -top-3 left-[50%] transform -translate-x-1/2 m-2 px-2 h-5 rounded-full bg-red-400 text-white flex flex-row items-center justify-center shadow-md text-xs w-[25vw]"
+              className="cursor-help absolute -top-3 left-[50%] transform -translate-x-1/2 m-2 px-2 h-5 rounded-full bg-red-400 text-white flex flex-row items-center justify-center shadow-md text-xs w-[25vw] md:w-[15vw]"
             >
               <span className='font-extrabold'>x&nbsp;</span> {(((selectedCalc?.apr) ?? 0) + financeTaxRate).toLocaleString(undefined)}%
             </button>
@@ -201,6 +201,7 @@ export default function PaymentChart({ /* paymentType, */ tableTermOptions, tabl
               <p className='bg-gray-500/30'><strong>Adjusted Total:</strong>{' '} ${selectedCalc.adjustedTotal.toLocaleString(undefined)}</p>
               <p><strong>Sales Tax Rate (MN):</strong>{' '} {selectedCalc.financeTaxRate}%</p>
               <p><strong>APR:</strong> {selectedCalc.apr}%</p>
+              {/* <p><strong>Cumulative Rate:</strong>{' '} {selectedCalc.financeTaxRate + selectedCalc.apr}%</p> */}
               <p><strong>Term:</strong> {selectedCalc.termOption} months</p>
             </div>
   

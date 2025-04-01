@@ -39,7 +39,7 @@ export default function FormData({carPrice, setCarPrice, accessories, setAccesso
         <div className="relative group">
           <button
             type="button"
-            className="cursor-help absolute -top-7 left-1/2 transform -translate-x-1/2 m-2 px-2 h-5 rounded-full bg-red-400 text-white shadow-md text-xs w-[25vw]"
+            className="cursor-help absolute -top-7 left-1/2 transform -translate-x-1/2 m-2 px-2 h-5 rounded-full bg-red-400 text-white shadow-md text-xs w-[25vw] md:w-[15vw]"
           >
             <span className="font-extrabold">+&nbsp;</span> {(baseTotal).toLocaleString(undefined)}
           </button>
@@ -127,7 +127,7 @@ export default function FormData({carPrice, setCarPrice, accessories, setAccesso
       <div className="relative">
         <button
           type="button"
-          className="absolute -top-9 left-[50%] transform -translate-x-1/2 m-2 px-2 h-5 rounded-full bg-green-400 text-white flex items-center justify-center shadow-md text-xs w-[25vw]"
+          className="absolute -top-9 left-[50%] transform -translate-x-1/2 m-2 px-2 h-5 rounded-full bg-green-400 text-white flex items-center justify-center shadow-md text-xs w-[25vw] md:w-[15vw]"
         >
           <span className="font-extrabold">-&nbsp;</span> {(cashDown + tradeInVal).toLocaleString(undefined)}
         </button>
